@@ -35,7 +35,3 @@ pfServer.listen(PORT,()=>{
 pfServer.get('/',(req,res)=>{
     res.send(`<h1>project fair started at port 4000</h1>`)
 })
-pfServer.put('/',(req,res)=>{
-    res.send(`hiiiioooooooo`)
-})
-
