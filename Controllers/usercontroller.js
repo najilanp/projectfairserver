@@ -1,22 +1,20 @@
 
 //import user model
 const users = require('../Models/userSchema')
+const jwt = require('jsonwebtoken')
 
 //register
 exports.register =  async(req,res)=>{
     console.log("inside register function");
     const {username,email,password}=req.body
     console.log(`username:${username},Email:${email},password:${password}`);
+    try{
 
-
-    //check already existing user-findone()
-
+           //check already existing user-findone()
     const existingUser = await users.findOne({email})
-        //  res.status(200).json("register request function")
-
 
     if(existingUser){
-         res.status(401).json('user already exist..please login')
+         res.status(406).json('user already exist..please login')
     }else{
 
         //register user
@@ -26,4 +24,40 @@ exports.register =  async(req,res)=>{
          await newUser.save()
           res.status(200).json(newUser)
      }
+
+    }catch(err){
+        res.status(401).json(`Error!!!Transaction failed:${err}`)
+
+    }
+ 
+}
+
+//login
+
+exports.login=async (req,res)=>{
+    console.log("inside login function");
+    const{email,password}=req.body
+    try{
+
+      //check user exist
+      const existingUser = await users.findOne({email,password})
+
+      if(existingUser){
+
+        //generate token
+        const token=jwt.sign({userId:existingUser._id},"superSecretKey123")
+
+        res.status(200).json({
+            existingUser,
+            role:"user",
+            token
+        })
+      }else{
+        res.status(404).json("incorrect email/password")
+      }
+
+    }catch(err){
+        res.status(401).json(`Error!!!Transaction failed:${err}`)
+
+    }
 }
