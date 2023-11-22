@@ -22,5 +22,22 @@ router.post('/user/login',userController.login)
 //addproject
 router.post('/projects/add',jwtMiddleware,multerConfig.single('projectImage'),projectController.addProject)
 
+//getuserprojects
+router.get('/user/all-projects',jwtMiddleware,projectController.getAllUserProjects)
+
+//gethomeproject
+router.get('/home/projects',projectController.getHomeProjects)
+
+//getallprojects
+router.get('/projects/all',jwtMiddleware,projectController.getAllProjects)
+ 
+//edit project
+router.put('/project/edit/:id',jwtMiddleware,multerConfig.single('projectImage'),projectController.editProject)
+
+//deleteproject
+router.delete('/project/remove/:id',jwtMiddleware,projectController.deleteProject)
+
+//updateprofile
+router.put('/user/update',jwtMiddleware,multerConfig.single('profileImage'),userController.updateProfile)
 
 module.exports=router
